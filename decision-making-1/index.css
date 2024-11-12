@@ -1,0 +1,55 @@
+:root {
+  --bg-color: #EFF0D1;
+  --primary: #D7C0D0;
+}
+
+body {
+  text-align: center;
+  background-color: var(--bg-color);
+  font-family: 'Ubuntu', sans-serif;
+  margin: 30px 0;
+}
+
+table, table th, table td {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  background-color: var(--primary);
+}
+
+input[type="file"]::file-selector-button {
+  padding: 6px 12px;
+  background-color: var(--primary);
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+#input-file {
+  margin-top: 10px;
+}
+
+#results {
+  width: 40%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.method-name {
+  font-weight: bold;
+}
+
+.method-name span {
+  font-weight: normal;
+}
+
+#hurwitz-plot {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+

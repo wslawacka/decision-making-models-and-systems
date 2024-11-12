@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assignment 1</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+  <h1>Basic methods of decision making</h1>
+
+  <label for="input-file">Upload a file with the decision table:</label><br>
+  <input type="file" accept=".csv" id="input-file">
+
+  <p>File read: <span id="file-name"></span></p>
+
+  <h2>Decision table:</h2>
+  <table id="decision-table"></table>
+
+  <h2>Results:</h2>
+  <div id="results">
+    <p class="method-name">Optimistic approach: <span id="optimistic-result"></span></p>
+    <p class="method-name">Pessimistic approach: <span id="pessimistic-result"></span></p>
+    <p class="method-name">Laplace method: <span id="laplace-result"></span></p>
+    <p class="method-name">Savage (least regret) method: <span id="savage-result"></span></p>
+    <p class="method-name">Hurwitz method (criteria): </p>
+    <table id="hurwitz-table"></table>
+  </div>
+
+  <div id="hurwitz-plot"></div>
+
+  <script src="index.js"></script>
+  
+</body>
+</html>
