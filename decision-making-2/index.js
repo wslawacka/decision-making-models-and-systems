@@ -3,6 +3,9 @@ const table = document.getElementById('kepner-tregoe-table');
 
 const addParameterButton = document.getElementById('parameter-button');
 
+
+let rowNum = 1;
+
 addParameterButton.addEventListener('click', () => {
   
   const tr = document.createElement('tr');
@@ -11,8 +14,10 @@ addParameterButton.addEventListener('click', () => {
     const td = document.createElement('td');
     if(!columnIndex){
       td.innerHTML = '<input type="text">';
+    } else if(columnIndex === 1){
+      td.innerHTML = `<input type="number" min=0 max=10 step=1 id="weight${rowNum++}">`;
     } else {
-      td.innerHTML = '<input type="number" min=1 max=10 step=1>';
+      td.innerHTML = `<input type="number" min=0 max=10 step=1 id="score${rowNum++}${columnIndex}">`;
     }
     tr.appendChild(td);
   });
@@ -39,7 +44,7 @@ addAlternativeButton.addEventListener('click', () => {
       } else {
         element = 'td';
         cellContent = `
-        <input type="number" min=1 max=10 step=1>
+        <input type="number" min=0 max=10 step=1 id="score${rowIndex}${colNum}">
         `;
       }
       const cell = document.createElement(element);
@@ -61,12 +66,32 @@ calculateButton.addEventListener('click', () => {
   const tr = document.createElement('tr');
 
   document.querySelectorAll('#kepner-tregoe-table th').forEach((column, columnIndex) => {
+
     const td = document.createElement('td');
+
+    if(columnIndex > 1){
+      
+      let sum = 0;
+      document.querySelectorAll('#kepner-tregoe-table tr').forEach((row, rowIndex) => {
+        if(rowIndex){
+          
+          const weight = parseFloat(document.getElementById(`weight${rowIndex}`).value);
+          const score = parseFloat(document.getElementById(`score${rowIndex}${columnIndex}`).value);
+          sum += weight * score;
+        }
+      });
+
+      td.innerHTML = sum;
+    }
+   
+    
+
+
     tr.appendChild(td);
+
   });
 
   table.appendChild(tr);
-
 
 });
 
@@ -80,6 +105,12 @@ resetButton.addEventListener('click', () => {
     </tr>
   `;
   colNum = 1;
+  rowNum = 1;
 });
 
 
+
+
+// add the ids to the inputs
+// block adding the parameters after calculating
+// make it look prettier when there are many parameters and alternatives
