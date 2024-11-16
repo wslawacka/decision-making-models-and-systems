@@ -34,7 +34,7 @@ addParameterButton.addEventListener('click', () => {
     // if it's the second column, add a number input for the weight
     // for the rest of the columns, add a number input for the score
     if(!columnIndex){
-      td.innerHTML = '<input type="text">';
+      td.innerHTML = `<input type="text" id="parameter${rowNum}">`;
     } else if(columnIndex === 1){
       td.innerHTML = `<input type="number" min=0 max=10 step=1 id="weight${rowNum}">`;
     } else {
@@ -75,8 +75,8 @@ addAlternativeButton.addEventListener('click', () => {
       if(!rowIndex){
         element = 'th';
         cellContent = `
-        Alternative ${colNum++} <br>
-        <input type="text">`;
+        Alternative ${colNum} <br>
+        <input type="text" id="alternative${colNum++}">`;
         // for the rest of the rows, add a number input for the score
       } else {
         element = 'td';
@@ -119,6 +119,7 @@ calculateButton.addEventListener('click', () => {
 
     const td = document.createElement('td');
     td.id = `result${columnIndex}`;
+    td.classList.add('result');
 
     if(columnIndex > 1){
       
@@ -148,6 +149,79 @@ calculateButton.addEventListener('click', () => {
   const winner = document.getElementById(`result${maxIndex}`);
   winner.classList.add('winner');
 
+
+
+
+  // create the data array for the alternatives comparison plot
+  const xArrayAlternatives = [];
+  const yArrayAlternatives = [];
+  const colorArray = [];
+  let alternativeName = '';
+  let alternativeScore = 0;
+  for(let i=1; i<colNum; i++){
+    alternativeName = document.getElementById(`alternative${i}`).value;
+    xArrayAlternatives.push(alternativeName);
+    alternativeScore = parseFloat(document.getElementById(`result${i+1}`).innerHTML);
+    yArrayAlternatives.push(alternativeScore);
+    if(i === maxIndex-1){
+      colorArray.push("rgb(105, 186, 80)");
+    } else {
+      colorArray.push("rgb(215, 192, 208)");
+    }
+  }
+  const dataAlternatives = [{
+    x: xArrayAlternatives, 
+    y: yArrayAlternatives, 
+    type: "bar",
+    text: yArrayAlternatives.map(String),
+    textposition: 'auto',
+    hoverinfo: 'none',
+    marker: {color: colorArray}
+  }];
+
+
+  // create a layout for the alternatives comparison plot
+  const layoutAlternatives = {
+    width: 500,
+    height: 340,
+    title: "Alternatives comparison"
+  };
+
+  // create the alternatives comparison plot
+  Plotly.newPlot("alternatives-comparison-plot", dataAlternatives, layoutAlternatives);
+
+
+  // create the data for the parameters' weights comparison plot
+  const xArrayParameters = [];
+  const yArrayParameters = [];
+  let parameterName = '';
+  let parameterWeight = 0;
+
+  for(let i=1; i<rowNum; i++){
+    parameterName = document.getElementById(`parameter${i}`).value;
+    xArrayParameters.push(parameterName);
+    parameterWeight = document.getElementById(`weight${i}`).value;
+    yArrayParameters.push(parameterWeight);
+  }
+
+  console.log('x: ' + xArrayParameters + ' y: '+ yArrayParameters);
+
+  const dataParameters = [{
+    labels: xArrayParameters,
+    values: yArrayParameters,
+    type: 'pie'
+  }];
+
+  // create a layout for the parameters' weights comparison plot
+  const layoutParameters = {
+    width: 500,
+    height: 340,
+    title: "Parameters' weights"
+  };
+
+  // create the parameters' weights comparison plot
+  Plotly.newPlot("parameters-weights-plot", dataParameters, layoutParameters);
+
 });
 
 const resetButton = document.getElementById('reset-button');
@@ -161,7 +235,12 @@ resetButton.addEventListener('click', () => {
   `;
   colNum = 1;
   rowNum = 1;
+
+  // stop displaying the plots
 });
+
+
+
 
 
 
