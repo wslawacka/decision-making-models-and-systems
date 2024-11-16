@@ -30,7 +30,7 @@ addParameterButton.addEventListener('click', () => {
     // create a new cell element
     const td = document.createElement('td');
 
-    // if it's the first column, add a text input
+    // if it's the first column, add a text input for the name of the parameter
     // if it's the second column, add a number input for the weight
     // for the rest of the columns, add a number input for the score
     if(!columnIndex){
@@ -110,47 +110,59 @@ const calculateButton = document.getElementById('calculate-button');
 // after clicking the button, calculate the results
 calculateButton.addEventListener('click', () => {
 
+  // disable the buttons after calculating
+  addAlternativeButton.disabled = true;
+  addParameterButton.disabled = true;
+  calculateButton.disabled = true;
+
+  // create a new row for the results
   const tr = document.createElement('tr');
 
   let max = -Infinity;
   let maxIndex = 0;
 
+  // for each column in the table, create a new cell
   document.querySelectorAll('#kepner-tregoe-table th').forEach((column, columnIndex) => {
 
     const td = document.createElement('td');
     td.id = `result${columnIndex}`;
     td.classList.add('result');
 
+    // omit the first two columns (parameters and weights)
     if(columnIndex > 1){
       
       let sum = 0;
+
+      // for each row in the table, add to the sum the product of the weight and the score
       document.querySelectorAll('#kepner-tregoe-table tr').forEach((row, rowIndex) => {
+        // omit the first row (headers)
         if(rowIndex){
-          
           const weight = parseFloat(document.getElementById(`weight${rowIndex}`).value);
           const score = parseFloat(document.getElementById(`score${rowIndex}${columnIndex}`).value);
           sum += weight * score;
-  
         }
       });
 
       td.innerHTML = sum;
+      
+      // keep track of the maximum result and its index
       if(sum > max){
         max = sum;
         maxIndex = columnIndex;
       }
     }
 
+    // append the cell to the row
     tr.appendChild(td);
 
   });
 
+  // append the row to the table
   table.appendChild(tr);
+
+  // highlight the winner
   const winner = document.getElementById(`result${maxIndex}`);
   winner.classList.add('winner');
-
-
-
 
   // create the data array for the alternatives comparison plot
   const xArrayAlternatives = [];
@@ -158,17 +170,21 @@ calculateButton.addEventListener('click', () => {
   const colorArray = [];
   let alternativeName = '';
   let alternativeScore = 0;
+
+  // for each column in the table, add the alternative name and the result score to the arrays
   for(let i=1; i<colNum; i++){
     alternativeName = document.getElementById(`alternative${i}`).value;
     xArrayAlternatives.push(alternativeName);
     alternativeScore = parseFloat(document.getElementById(`result${i+1}`).innerHTML);
     yArrayAlternatives.push(alternativeScore);
+    // highlight the winner
     if(i === maxIndex-1){
       colorArray.push("rgb(105, 186, 80)");
     } else {
       colorArray.push("rgb(215, 192, 208)");
     }
   }
+
   const dataAlternatives = [{
     x: xArrayAlternatives, 
     y: yArrayAlternatives, 
@@ -197,14 +213,13 @@ calculateButton.addEventListener('click', () => {
   let parameterName = '';
   let parameterWeight = 0;
 
+  // for each row in the table, add the parameter name and the weight to the arrays
   for(let i=1; i<rowNum; i++){
     parameterName = document.getElementById(`parameter${i}`).value;
     xArrayParameters.push(parameterName);
     parameterWeight = document.getElementById(`weight${i}`).value;
     yArrayParameters.push(parameterWeight);
   }
-
-  console.log('x: ' + xArrayParameters + ' y: '+ yArrayParameters);
 
   const dataParameters = [{
     labels: xArrayParameters,
@@ -224,27 +239,34 @@ calculateButton.addEventListener('click', () => {
 
 });
 
+
+//---------------------------------------------------------------------------------------------------------------//
+
+
+// get the button to reset the table
 const resetButton = document.getElementById('reset-button');
 
+// after clicking the button, reset the table
 resetButton.addEventListener('click', () => {
+
+  // clear the table
   table.innerHTML = `
   <tr>
       <th>Parameters</th>
       <th>Weight (0-10)</th>
     </tr>
   `;
+
+  // reset the row and column numbers
   colNum = 1;
   rowNum = 1;
 
   // stop displaying the plots
   document.getElementById('alternatives-comparison-plot').innerHTML = '';
   document.getElementById('parameters-weights-plot').innerHTML = '';
+
+  // enable the buttons
+  addAlternativeButton.disabled = false;
+  addParameterButton.disabled = false;
+  calculateButton.disabled = false;
 });
-
-
-
-
-
-
-// block adding the parameters after calculating
-// make it look prettier when there are many parameters and alternatives

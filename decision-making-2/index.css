@@ -2,6 +2,7 @@
   --bg-color: #EFF0D1;
   --pink: #D7C0D0;
   --blue: #8CDDE1;
+  --light-green: #7ec06a;
   --green: #69BA50;
   --yellow: #EDCA4C;
   --gray: #898884;
@@ -40,7 +41,7 @@ button:active {
 }
 
 #calculate-button {
-  background-color: var(--green);
+  background-color: var(--light-green);
 }
 
 #reset-button {
