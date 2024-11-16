@@ -237,6 +237,8 @@ resetButton.addEventListener('click', () => {
   rowNum = 1;
 
   // stop displaying the plots
+  document.getElementById('alternatives-comparison-plot').innerHTML = '';
+  document.getElementById('parameters-weights-plot').innerHTML = '';
 });
 
 
