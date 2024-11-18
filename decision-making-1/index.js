@@ -36,6 +36,9 @@ document.getElementById('input-file').addEventListener('change', function(event)
 });
 
 
+//--------------------------------------------------------------------------------------------------------------//
+
+
 // function to create a table
 function createTable(rows, tableId){
 
@@ -62,6 +65,10 @@ function createTable(rows, tableId){
   });
 
 }
+
+
+//--------------------------------------------------------------------------------------------------------------//
+
 
 // function to calculate the optimistic approach
 function optimisticApproach(rows){
@@ -101,6 +108,9 @@ function optimisticApproach(rows){
 }
 
 
+//--------------------------------------------------------------------------------------------------------------//
+
+
 function pessimisticApproach(rows){
 
   // get the number of rows and columns
@@ -138,6 +148,9 @@ function pessimisticApproach(rows){
 }
 
 
+//--------------------------------------------------------------------------------------------------------------//
+
+
 function laplaceMethod(rows){
 
   // get the number of rows and columns
@@ -173,6 +186,9 @@ function laplaceMethod(rows){
   return name + ' (' + result + ')';
 
 }
+
+
+//--------------------------------------------------------------------------------------------------------------//
 
 
 function savageMethod(rows) {
@@ -235,12 +251,12 @@ function savageMethod(rows) {
 }
 
 
+//--------------------------------------------------------------------------------------------------------------//
 
 
 function hurwitzMethod(rows){
 
-  // get the number of rows and columns
-  const numRows = rows.length;
+  // get the number of columns
   const numCols = rows[0].length;
 
   // create a new array to store the results
@@ -252,15 +268,16 @@ function hurwitzMethod(rows){
     newRows[0][j] = rows[0][j];
   }
 
-  // set the values of the first column
+  // initialize the array of x values for the plot
+  const xValues = [];
+
+  // set the values of the first column and the x values for the plot
   let h = 0;
   for(let i = 1; i < newRows.length; i++){
     newRows[i][0] = h.toFixed(1);
-    h += 0.1
+    xValues.push(h.toFixed(1));
+    h += 0.1;
   }
-
-  // initialize the array of x values for the plot
-  const xValues = [];
 
   // for each column
   for(let j = 1; j < numCols; j++){
@@ -268,8 +285,6 @@ function hurwitzMethod(rows){
     let i = 1;
     // for each value of h
     for(let h = 0; h <= 1; h += 0.1){
-      // add the value of h to the array of x values
-      xValues.push(h);
       // create an array to store the values of the column
       const columnValues = rows.slice(1).map(el=>parseFloat(el[j]));
       // calculate the maximum and minimum values of the column
@@ -281,10 +296,10 @@ function hurwitzMethod(rows){
       i++;
     }
   }
+
   // create a table with the Hurwitz method results
   createTable(newRows, 'hurwitz-table');
 
-  
   // create a data array for the plot
   const data = [];
   for(let i = 1; i < numCols; i++){
