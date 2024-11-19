@@ -33,7 +33,7 @@ addParameterButton.addEventListener('click', () => {
     // if it's the first column, add a text input for the name of the parameter
     // if it's the second column, add a number input for the weight
     // for the rest of the columns, add a number input for the score
-    if(!columnIndex){
+    if(columnIndex === 0){
       td.innerHTML = `<input type="text" id="parameter${rowNum}">`;
     } else if(columnIndex === 1){
       td.innerHTML = `<input type="number" min=0 max=10 step=1 id="weight${rowNum}">`;
@@ -72,7 +72,7 @@ addAlternativeButton.addEventListener('click', () => {
       let cellContent = '';
       let element = '';
       // if it's the first row, add a header cell with the alternative number
-      if(!rowIndex){
+      if(rowIndex === 0){
         element = 'th';
         cellContent = `
         Alternative ${colNum} <br>
@@ -110,6 +110,22 @@ const calculateButton = document.getElementById('calculate-button');
 // after clicking the button, calculate the results
 calculateButton.addEventListener('click', () => {
 
+  const allInputs = document.querySelectorAll('input');
+  let allFilled = true;
+
+  // check if all inputs are filled
+  allInputs.forEach(input => {
+    if(input.value === ''){
+      allFilled = false;
+    }
+  });
+
+  // if not all inputs are filled, display an alert
+  if(!allFilled){
+    alert('Please fill out all required fields before calculating!');
+    return;
+  }
+
   // disable the buttons after calculating
   addAlternativeButton.disabled = true;
   addParameterButton.disabled = true;
@@ -119,7 +135,7 @@ calculateButton.addEventListener('click', () => {
   const tr = document.createElement('tr');
 
   let max = -Infinity;
-  let maxIndex = 0;
+  let winners = [];
 
   // for each column in the table, create a new cell
   document.querySelectorAll('#kepner-tregoe-table th').forEach((column, columnIndex) => {
@@ -136,7 +152,7 @@ calculateButton.addEventListener('click', () => {
       // for each row in the table, add to the sum the product of the weight and the score
       document.querySelectorAll('#kepner-tregoe-table tr').forEach((row, rowIndex) => {
         // omit the first row (headers)
-        if(rowIndex){
+        if(rowIndex > 0){
           const weight = parseFloat(document.getElementById(`weight${rowIndex}`).value);
           const score = parseFloat(document.getElementById(`score${rowIndex}${columnIndex}`).value);
           sum += weight * score;
@@ -145,10 +161,12 @@ calculateButton.addEventListener('click', () => {
 
       td.innerHTML = sum;
       
-      // keep track of the maximum result and its index
+      // keep track of the maximum result and its indexes
       if(sum > max){
         max = sum;
-        maxIndex = columnIndex;
+        winners = [columnIndex];
+      } else if(sum === max){
+        winners.push(columnIndex);
       }
     }
 
@@ -160,9 +178,12 @@ calculateButton.addEventListener('click', () => {
   // append the row to the table
   table.appendChild(tr);
 
-  // highlight the winner
-  const winner = document.getElementById(`result${maxIndex}`);
-  winner.classList.add('winner');
+  // highlight the winner (or winners)
+  winners.forEach(winnerIndex => {
+    const winner = document.getElementById(`result${winnerIndex}`);
+    winner.classList.add('winner');
+  });
+  
 
   // create the data array for the alternatives comparison plot
   const xArrayAlternatives = [];
@@ -178,7 +199,7 @@ calculateButton.addEventListener('click', () => {
     alternativeScore = parseFloat(document.getElementById(`result${i+1}`).innerHTML);
     yArrayAlternatives.push(alternativeScore);
     // highlight the winner
-    if(i === maxIndex-1){
+    if(winners.includes(i+1)){
       colorArray.push("rgb(105, 186, 80)");
     } else {
       colorArray.push("rgb(215, 192, 208)");

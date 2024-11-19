@@ -48,22 +48,22 @@ button:active {
   background-color: var(--yellow);
 }
 
-table, table th, table td {
+#kepner-tregoe-table, #kepner-tregoe-table th, #kepner-tregoe-table td {
   border: 1px solid var(--gray);
   padding: 14px 20px;
 }
 
-table {
+#kepner-tregoe-table {
   border-collapse: collapse;
   margin: 10px 0;
 }
 
-table th {
+#kepner-tregoe-table th {
   width: 190px;
   height: 44px;
 }
 
-table td {
+#kepner-tregoe-table td {
   height: 34px;
 }
 
@@ -75,8 +75,7 @@ input {
   width: 90%;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
   opacity: 1;
 }
 
