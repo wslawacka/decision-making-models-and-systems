@@ -12,6 +12,9 @@ body {
   background-color: var(--bg-color);
   font-family: 'Ubuntu', sans-serif;
   margin: 20px 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 h1 {
