@@ -7,6 +7,17 @@ let colNum = 1;
 //---------------------------------------------------------------------------------------------------------------//
 
 
+const createNumberInput = () => {
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.min = 0;
+  input.max = 10;
+  input.step = 1;
+  addNumberInputValidation(input);
+  return input;
+}
+
+
 // a function to validate the input of the number inputs (between 0 and 10)
 const addNumberInputValidation = (input) => {
   input.addEventListener('input', () => {
@@ -55,22 +66,12 @@ addParameterButton.addEventListener('click', () => {
     if(columnIndex === 0){
       td.innerHTML = `<input type="text" id="parameter${rowNum}">`;
     } else if(columnIndex === 1){
-      const input = document.createElement('input');
-      input.type = 'number';
-      input.min = 0;
-      input.max = 10;
-      input.step = 1;
+      const input = createNumberInput();
       input.id = `weight${rowNum}`;
-      addNumberInputValidation(input); 
       td.appendChild(input);
     } else {
-      const input = document.createElement('input');
-      input.type = 'number';
-      input.min = 0;
-      input.max = 10;
-      input.step = 1;
+      const input = createNumberInput();
       input.id = `score${rowNum}${columnIndex}`;
-      addNumberInputValidation(input); 
       td.appendChild(input);
     }
 
@@ -111,13 +112,8 @@ addAlternativeButton.addEventListener('click', () => {
             Alternative ${colNum} <br>
             <input type="text" id="alternative${colNum++}">`;
         } else {
-            const input = document.createElement('input');
-            input.type = 'number';
-            input.min = 0;
-            input.max = 10;
-            input.step = 1;
+            const input = createNumberInput();
             input.id = `score${rowIndex}${colNum}`;
-            addNumberInputValidation(input); 
             cell.appendChild(input);
         }
         row.appendChild(cell);
