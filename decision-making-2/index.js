@@ -7,6 +7,7 @@ let colNum = 1;
 //---------------------------------------------------------------------------------------------------------------//
 
 
+// a function to create a number input element
 const createNumberInput = () => {
   const input = document.createElement('input');
   input.type = 'number';
@@ -16,6 +17,9 @@ const createNumberInput = () => {
   addNumberInputValidation(input);
   return input;
 }
+
+
+//---------------------------------------------------------------------------------------------------------------//
 
 
 // a function to validate the input of the number inputs (between 0 and 10)
