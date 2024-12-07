@@ -7,6 +7,25 @@ let colNum = 1;
 //---------------------------------------------------------------------------------------------------------------//
 
 
+// a function to validate the input of the number inputs (between 0 and 10)
+const addNumberInputValidation = (input) => {
+  input.addEventListener('input', () => {
+      const value = parseInt(input.value); 
+      if (value < 0) {
+          input.value = 0;
+      } else if (value > 10) {
+          input.value = 10;
+      }
+      if (value < 0 || value > 10) {
+          alert('You need to input the value between 0 and 10!');
+      }
+  });
+};
+
+
+//---------------------------------------------------------------------------------------------------------------//
+
+
 // get the table element
 const table = document.getElementById('kepner-tregoe-table');
 
@@ -36,9 +55,23 @@ addParameterButton.addEventListener('click', () => {
     if(columnIndex === 0){
       td.innerHTML = `<input type="text" id="parameter${rowNum}">`;
     } else if(columnIndex === 1){
-      td.innerHTML = `<input type="number" min=0 max=10 step=1 id="weight${rowNum}">`;
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = 0;
+      input.max = 10;
+      input.step = 1;
+      input.id = `weight${rowNum}`;
+      addNumberInputValidation(input); 
+      td.appendChild(input);
     } else {
-      td.innerHTML = `<input type="number" min=0 max=10 step=1 id="score${rowNum}${columnIndex}">`;
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = 0;
+      input.max = 10;
+      input.step = 1;
+      input.id = `score${rowNum}${columnIndex}`;
+      addNumberInputValidation(input); 
+      td.appendChild(input);
     }
 
     // append the cell to the row
@@ -69,34 +102,33 @@ addAlternativeButton.addEventListener('click', () => {
   const addColumn = () => {
     // for each row in the table
     document.querySelectorAll('#kepner-tregoe-table tr').forEach((row, rowIndex) => {
-      let cellContent = '';
-      let element = '';
-      // if it's the first row, add a header cell with the alternative number
-      if(rowIndex === 0){
-        element = 'th';
-        cellContent = `
-        Alternative ${colNum} <br>
-        <input type="text" id="alternative${colNum++}">`;
-        // for the rest of the rows, add a number input for the score
-      } else {
-        element = 'td';
-        cellContent = `
-        <input type="number" min=0 max=10 step=1 id="score${rowIndex}${colNum}">
-        `;
-      }
-      const cell = document.createElement(element);
-      cell.innerHTML = cellContent;
-      row.appendChild(cell);
-      table.appendChild(row);
+      // create a new cell element
+      const cell = document.createElement(rowIndex === 0 ? 'th' : 'td');
+      // if it's the first row, add a text input for the name of the alternative
+      // if it's the rest of the rows, add a number input for the score
+        if (rowIndex === 0) {
+            cell.innerHTML = `
+            Alternative ${colNum} <br>
+            <input type="text" id="alternative${colNum++}">`;
+        } else {
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.min = 0;
+            input.max = 10;
+            input.step = 1;
+            input.id = `score${rowIndex}${colNum}`;
+            addNumberInputValidation(input); 
+            cell.appendChild(input);
+        }
+        row.appendChild(cell);
+        table.appendChild(row);
     });
     
   }
-
   // add a new column to the table
   addColumn();
 
 });
-
 
 
 
